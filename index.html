@@ -286,6 +286,35 @@
             visibility: hidden;
             opacity: 0;
         }
+
+        .info-text {
+            margin-top: 20px;
+            /* 上の余白 */
+            margin-bottom: 10px;
+            /* 下に白い隙間を追加 */
+            font-size: 13px;
+            color: #000000;
+            line-height: 1.5;
+            text-align: center;
+            word-wrap: break-word;
+            background-color: #eef9f5;
+            /* 青っぽい背景色を追加 */
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        /* 携帯端末向けのレスポンシブデザイン */
+        @media (max-width: 768px) {
+            .info-text {
+                font-size: 11.5px;
+                /* スマホでは少し小さく */
+                margin-top: 10px;
+                /* 上下のマージンを調整 */
+                line-height: 2.0;
+                /* テキストの高さ調整 */
+            }
+        }
+
     </style>
 </head>
 
@@ -305,8 +334,6 @@
             <button type="button" id="sanmr" onclick="selectmr(this)">その他</button> <!-- 2回目以降来院ボタン -->
         </div>
 
-        <input type="text" id="others" placeholder="【その他】を選択された方はご記入ください"> <!-- 名前入力フィールド -->
-
         <div class="label">面談希望場所※任意</div>
         <div class="visit-buttons">
             <button type="button" id="itiVisit" onclick="selectVisit(this)">明石サロン</button> <!-- 初めて来院ボタン -->
@@ -315,12 +342,14 @@
             <button type="button" id="yonVisit" onclick="selectVisit(this)">出張面談希望</button> <!-- 2回目以降来院ボタン -->
         </div>
 
-        <input type="text" id="business" placeholder="【出張面談希望】を選択された方はご記入ください"> <!-- 名前入力フィールド -->
+        <div class="info-text">【出張面談希望】を選択された方はご希望場所をご記入ください</div>
+
+        <input type="text" id="business" placeholder="ご入力ください"> <!-- 名前入力フィールド -->
 
         <div class="label">お問い合わせ内容</div>
         <textarea id="message" rows="4" placeholder="お問い合わせ内容を入力してください"></textarea> <!-- メッセージ入力フィールド -->
 
-        <button class="submit-button" onclick="submitForm()">お問い合わせ内容を送信</button> <!-- フォーム送信ボタン -->
+        <button class="submit-button" onclick="submitForm()">お問い合わせ内容を送信する</button> <!-- フォーム送信ボタン -->
     </div>
 
     <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script> <!-- LIFF SDKの読み込み -->
@@ -381,7 +410,6 @@
             /* フォームの入力値を取得 */
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
-            const others = document.getElementById('others').value;
             const business = document.getElementById('business').value;
             const message = document.getElementById('message').value;
 
@@ -389,7 +417,6 @@
             const formData = {
                 name,
                 phone,
-                others,
                 business,
                 visitCount,
                 mrCount,
@@ -399,7 +426,7 @@
             // LINEトークにメッセージを送信
             liff.sendMessages([{
                 type: 'text',
-                text: `≪お問い合わせフォーム≫\n【お名前】\n・${formData.name}\n【電話番号】\n・${formData.phone}\n【お問い合わせ区別】\n・${formData.mrCount}\n【その他】\n・${formData.others}\n【面談希望場所】\n・${formData.visitCount}\n【出張面談希望】\n・${formData.business}\n【メッセージ】\n${formData.message}`
+                text: `≪お問い合わせフォーム≫\n【お名前】\n・${formData.name}\n【電話番号】\n・${formData.phone}\n【お問い合わせ区別】\n・${formData.mrCount}\n【面談希望場所】\n・${formData.visitCount}\n【出張面談希望】\n・${formData.business}\n【メッセージ】\n${formData.message}`
             }]).then(() => {
                 /* メッセージ送信成功時の処理 */
                 alert('お問い合わせありがとうございます。\n"OK"をタップしてください。');
